@@ -1,0 +1,350 @@
+---
+title: "capstone_trips_2024"
+author: "Raul"
+date: "2025-09-23"
+output: html_document
+---
+
+# **Cyclist bike-share Analysis**  
+Este analisis de Cyclist bike-share case study, para el Google Data Analytics Professional Certificate, donde seguira el proceso de analisis: Ask, Prepare, Process, Analyze, Share and Act
+
+## **ASK**
+
+En este projecto se analizara la relación de uso de las bicicletas entre un usuario con membresia y un usuario casual. Para una nueva campaña de marketing para que los usuarios casuales adquieran una membresia.
+
+## **Prepare**
+
+Los datos se han obtenido de [DIVV-TripData](https://divvy-tripdata.s3.amazonaws.com/index.html)
+
+* Tools use
+  + Exploring Data
+    - RStudio
+  + Data Cleaning and Transforms Data
+    - RStudio
+  + Data visualizacion
+    - RStudio
+
+## **Process**
+Librerias que se van a usar
+```{r librerias}
+library(tidyverse)
+library(conflicted)
+library(skimr)
+library(patchwork)
+```
+
+Impotar datos a RStudio
+```{r exploracion de datos, warning=FALSE}
+ene_24 <- read.csv("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\Capstone\\202401-divvy-tripdata.csv")
+feb_24 <- read.csv("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\Capstone\\202402-divvy-tripdata.csv")
+mar_24 <- read.csv("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\Capstone\\202403-divvy-tripdata.csv")
+abr_24 <- read.csv("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\Capstone\\202404-divvy-tripdata.csv")
+may_24 <- read.csv("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\Capstone\\202405-divvy-tripdata.csv")
+jun_24 <- read.csv("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\Capstone\\202406-divvy-tripdata.csv")
+jul_24 <- read.csv("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\Capstone\\202407-divvy-tripdata.csv")
+ago_24 <- read.csv("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\Capstone\\202408-divvy-tripdata.csv")
+sep_24 <- read.csv("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\Capstone\\202409-divvy-tripdata.csv")
+oct_24 <- read.csv("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\Capstone\\202410-divvy-tripdata.csv")
+nov_24 <- read.csv("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\Capstone\\202411-divvy-tripdata.csv")
+dic_24 <- read.csv("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\Capstone\\202412-divvy-tripdata.csv")
+```
+
+### **Exploracion de datos**
+
+* verficar que todas las tablas tengan las mismas columnas
+
+  + Enero  
+```{r columna_ene, echo=FALSE, warning=FALSE}
+colnames(ene_24)
+```
+  + Febrero
+```{r columna_feb, echo=FALSE, warning=FALSE}
+colnames(feb_24)
+```
+  + Marzo
+```{r columna_mar, echo=FALSE, warning=FALSE}
+colnames(mar_24)
+```
+  + Abril
+```{r columna_abr, echo=FALSE, warning=FALSE}
+colnames(abr_24)
+```
+  + Mayo
+```{r columna_may, echo=FALSE, warning=FALSE}
+colnames(may_24)
+
+```
+  + Junio
+```{r columna_jun, echo=FALSE, warning=FALSE}
+colnames(jun_24)
+```
+  + Julio
+```{r columna_jul, echo=FALSE, warning=FALSE}
+colnames(jul_24)
+```
+  + Agosto
+```{r columna_ago, echo=FALSE, warning=FALSE}
+colnames(ago_24)
+```
+  + Septiembre
+```{r columna_sep, echo=FALSE, warning=FALSE}
+colnames(sep_24)
+```
+  + Octubre
+```{r columna_oct, echo=FALSE, warning=FALSE}
+colnames(oct_24)
+```
+  + Noviembre
+```{r columna_nov, echo=FALSE, warning=FALSE}
+colnames(nov_24)
+```
+  + Diciembre
+```{r columna_dic, echo=FALSE, warning=FALSE}
+colnames(dic_24)
+```
+  
+* Verificar que coincidan todos los tipos de datos en las columnas
+```{r tipo de datos, echo=FALSE, warning=FALSE}
+# Enero
+sapply(ene_24, class)
+# Febrero
+sapply(feb_24, class)
+# Marzo
+sapply(mar_24, class)
+# Abril
+sapply(abr_24, class)
+# Mayo
+sapply(may_24, class)
+# Junio
+sapply(jun_24, class)
+# Julio
+sapply(jul_24, class)
+# Agosto
+sapply(ago_24, class)
+# Septiembre
+sapply(sep_24, class)
+# Octubre
+sapply(oct_24, class)
+# Noviembre
+sapply(nov_24, class)
+# Diciembre
+sapply(dic_24, class)
+```
+Una vez verificado que todas las columnas y sus datos coinciden podemos unir las diferentes tablas en una sola
+
+
+* Unir las tablas en una sola
+```{r unir tablas, echo=FALSE}
+all_trips_24 <- bind_rows(ene_24, feb_24, mar_24, abr_24, may_24, jun_24, jul_24, ago_24, sep_24, oct_24, nov_24, dic_24)
+head(all_trips_24)
+```
+
+
+* Transformar los datos de la columna *started_at* a formato _POSIXct_ que es un formato de hora para poder realizar los calculos necesarios para el analisis
+```{r transformar datos, echo=TRUE, warning=FALSE}
+all_trips_24$started_at <- ymd_hms(all_trips_24$started_at)
+all_trips_24$ended_at <- ymd_hms(all_trips_24$ended_at)
+```
+
+### Limpieza y Transformación de datos
+
+* Calcular el tiempo que dura un viaje en segundos
+```{r calcular tiempo de viaje, echo=TRUE}
+all_trips_24$ride_length <- as.numeric(difftime(all_trips_24$ended_at, all_trips_24$started_at, units="secs"))
+all_trips_24 %>% 
+  select(started_at, ended_at, ride_length) %>% 
+  head()
+```
+
+
+* Verificar si hay viajes con un tiempo negativo
+```{r tiempo negativo, echo=TRUE}
+table(sign(all_trips_24$ride_length))
+```
+Existen 227 datos negativos y 496 datos con un tiempo de 0, los cuales debemos limpiar ya que no son necesarios para el analisis
+
+* Seperar los datos por datos en Año, Mes, Dia, Hora, y dia de la semana
+```{r nuevas columanas año, minutos, segundos, horas, dias, echo=TRUE}
+all_trips_24$year <- year(all_trips_24$started_at)
+all_trips_24$month <- month(all_trips_24$started_at)
+all_trips_24$day <- day(all_trips_24$started_at)
+all_trips_24$hour <- format(all_trips_24$started_at,  "%H:%M:%S")
+all_trips_24$day_week <- wday(all_trips_24$started_at, label = TRUE, abbr = FALSE,week_start = 7, locale = "en_US")
+
+all_trips_24 %>% 
+  select(year, month, day, hour, day_week) %>% 
+  head()
+```
+
+* Transformamos los meses de numeros por nombre
+```{r transformar meses de numeros a letras, echo=TRUE}
+all_trips_24 <- all_trips_24 %>% 
+  mutate(month = month(started_at, label = TRUE, abbr = FALSE, locale = "en_US"))
+
+all_trips_24 %>% 
+  select(year, month, day, hour, day_week) %>% 
+  head()
+```
+
+
+* Limpiar las columnas que no se van a usar para el analisis
+  + start_lat, start_lng
+  + end_lat, end_lng
+* Remover los viajes que tengan una duración negativa y igual a 0 seg.
+```{r limpieza de columnas, echo=TRUE}
+all_trips_24 <- all_trips_24 %>% 
+  select(-c(start_lat, start_lng, end_lat, end_lng))
+all_trips_24_v2 <- all_trips_24[!(all_trips_24$ride_length <= 0),]
+```
+
+## **Analisis**
+##### Pregunta para el analisis: *¿Cómo se diferencia el uso de Cyclistic bike entre los usuarios con membresia y los usuarios casuales?*  
+
+Primero vemos el procentaje que los diferentes usuarios realizan
+```{r grafico pie porcentaje, echo=FALSE, warning=FALSE}
+all_trips_24_v2 %>% 
+  count(member_casual) %>%
+  mutate(pct = round(n/sum(n)*100, 1),
+         label = paste0(member_casual, " (", pct, "%)")) %>%
+  ggplot(aes(
+    x = "", y = n, fill = member_casual)) +
+  geom_bar(stat = "identity", width = 1, color = "white") +
+  coord_polar("y") +
+  geom_text(aes(label = label),
+            position = position_stack(vjust = 0.5), color = "white", size = 5) +
+  labs(
+    title = "Percentage of ride by type of user", 
+    fill = "Member Casual") +
+  theme_void()
+```
+
+* Los usuarios con membresia tienen un mayor uso de las bicicletas a comparación de los usuarios casuales
+* Los usuarios con membresia usan los un 63.3%
+
+En el siguiente gráfico podemos ver cuales son las bicicletas más usadas
+```{r tipo de bicicleta, echo=FALSE, warning=FALSE}
+all_trips_24_v2 %>%
+  count(rideable_type, member_casual) %>%
+  ggplot(aes(x = rideable_type, y = n, fill = member_casual)) +
+  geom_col(position = "stack") +
+  coord_flip() +
+  scale_y_continuous(labels = function(x) format(x, big.mark = ",", scientific = FALSE))+
+  labs(
+    title = "Total Ride per Bike", x="Type of Bike", y="Number of Ride")
+```
+
+* Podemos observar que todos los usuarios de Cyclist prefieren usar las bicicletas antes que el scooter
+* Los usuarios prefieren usar las electric_bike
+* Los usuarios casuales prefieren las electric_bike antes que las classic_bike
+
+
+Se calcula la duración promedio de los viajes por mes que realizan los usuarios con membresia y los usuarios casuales
+
+```{r calculo duration ride}
+avg_duration_ride <- all_trips_24_v2 %>% 
+  group_by(member_casual, month) %>% 
+  summarise(avg_duration = mean(ride_length), .groups = "drop")
+```
+
+Comparemos la cantidad de viajes por mes y el tiempo que duran los viajes entre los usuarios con membrecia y los usuarios casuales
+```{r calculo de viaje por mes}
+# Agrupamos los datos por mes y se calcula el numero total de rides
+month_rides <- all_trips_24_v2 %>% 
+  group_by(member_casual, month) %>% 
+  summarise(number_of_ride = n(), .groups = "drop") %>% 
+  arrange(member_casual, month)
+```
+
+```{r grafico cantidad de viajes por mes, echo=FALSE, warning=FALSE}
+month_rides %>% 
+  ggplot(aes(x = month, y = number_of_ride, 
+             color = member_casual, 
+             group = member_casual)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  scale_y_continuous(labels = function(x) format(x, big.mark = ",", scientific = FALSE)) +
+  labs(title = "Total Rides per Month",
+       x = "Month", 
+       y = "Number of Rides",
+       color = "Member Casual") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+
+```{r tiempo de viaje por mes, echo=FALSE, warning=FALSE}
+avg_duration_ride %>% 
+  ggplot(aes(x=month, y=avg_duration, color = member_casual, group = member_casual))+
+  geom_line(linewidth = 1)+
+  geom_point(size = 2)+
+  labs(
+    title = "Avg Duration Ride 2024",
+    x="Month", y="Avg Duration (Secs)", 
+    color = "Member Casual")+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+* Se puede observar que los usuarios con membresia hacen mas viajes por mes
+* Los usuarios casuales hacen viajes mas largos
+
+
+Observemos como es el comportamiento de los usuarios por día
+```{r numero de viajes por dia, echo=FALSE, warning=FALSE}
+all_trips_24_v2 %>%
+  group_by(member_casual, day_week) %>% 
+  summarise(
+    number_of_ride = n(), .groups = "drop") %>%
+  ggplot(mapping = aes(
+    x=day_week, y=number_of_ride, fill = member_casual))+
+  geom_col(position = "dodge")+
+  scale_y_continuous(labels = function(x) format(x, big.mark = ",", scientific = FALSE))+
+  labs(
+    title = "Total ride per day", x="Day of Week", y="Number of Ride")+
+  theme(axis.text.x = element_text(angle = 45, hjust =1))
+```
+
+
+```{r duracion de los viajes por dia, echo=FALSE, warning=FALSE}
+all_trips_24_v2 %>% 
+  group_by(member_casual, day_week) %>%
+  summarise(avg_duration = mean(ride_length), .groups = "drop") %>% 
+  ggplot(mapping = aes(
+    x= day_week, y=avg_duration, fill = member_casual))+
+  geom_col(position = "dodge")+
+  scale_y_continuous(labels = function(x) format(x, big.mark = ",", scientific = FALSE))+
+  labs(
+    title = "Avg duration ride per day", x="Day of Week", y="Avg Duration (secs)")+
+  theme(axis.text.x = element_text(angle = 45, hjust =1))
+```
+
+* El día que los usuarios con membresia hacen más viajes son los miercoles, mientras que los usuarios casuales hacen más viajes el día Sábado
+* En total los usuarios con membresia realizan más viajes que los usuarios casuales, pero los usuarios casuales realizan viajes de una mayor duración
+
+## Share
+
+**Dashboard**
+```{r dashboard, echo=FALSE, warning=FALSE}
+knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\dashboard.png")
+```
+
+
+_¿Cómo se diferencia el uso de Cyclistic bike entre los usuarios con membresia y los usuarios casuales?_  
+Según lo encontrado en el analisis podemos ver que los usuarios con membresia usan las bicicletas con mayor frecuencia durante la semana, mientras que los usuarios casuales las usan los fin de semana, con un porcentaje mayor los días sábados.  
+Esto quizas se deba a que los usuarios casuales prefieren usar las bicicletas como un método de turismo o paseo, mientras que los usuarios con membresia los usan como un modo de transporte.  
+Tambien se puede observar que hay un decrecimiento en el uso apartir del mes de Septiembre por parte de ambos tipos de usuarios, esto se deba a que es el fin de summer
+
+## Act
+
+_Recomendaciones_  
+Segun el analisis hecho para una campaña de marketing para convertir usuarios casuales a usuarios con membresias mis sugerencia serian las siguientes:  
+* **Crear membresias personalizadas**
+  + Se puede crean membresias personalizadas para que puedan abarcar a un grupo de usuarios diferentes, por ejemplo un membresia mensual o trimestral, ya que hay un gran grupo de usuarios que usan el servicio durante el verano, el cual puede estar interesado en obtener una membresia durante ese tiempo.
+* **Dar descuento agregar a amigos**
+  + Como se puede observar en las gráficas los usuarios casuales usan el servico de Cyclist el día sábado, en donde podemos inferir que hay muchos miembros de Cyclist que usan con amigos, a los cuales se les pueden dar un descuento si agregan a sus amigos
+
+* **Campañas por temporada**
+  + Crear campañas por temporada, donde se pueden bajar los precios en fechas como las de inviernos donde los viajes de los usuarios con membresias y los casuales usan menos el servicio de Cyclist. Lanzar promociones de fin de semana, dias festivos o para viajes un poco más largos para los miembros que incentiven al uso de las bicicletas
+
+* **Redes Sociales**
+  + Basasdo en los puntos anteriores se pueden crear campañas de marketing, en redes sociales, donde se cuenten historias de como los usuarios casuales y miembreos usan el servicio de Cyclist. En esas historias se puede incluir como el servicio de Cyclist le ha ayudado a moverse por la cuidad o de como les ha servido como método de distracción de una semana muy estresante en el trabajo
+ 
+ 
