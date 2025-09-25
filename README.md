@@ -233,3 +233,28 @@ all_trips_24_v2 <- all_trips_24[!(all_trips_24$ride_length <= 0),]
 ```{r all_trips_v2, echo=FALSE, warning=FALSE}
 knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\all_trips_2024_v2.png")
 ```
+
+## **ANALYZE**  
+```{r meses nombre, include=FALSE}
+all_trips_24 <- all_trips_24 %>% 
+  mutate(month = month(started_at, label = TRUE, abbr = FALSE, locale = "en_US"))
+```
+##### __Question to analyze__ : *How do members and casual riders use Cyclist bike differently?*
+
+To answer this question first let's see the percentage of casual and member used  
+```{r grafico pie porcentaje, echo=FALSE, warning=FALSE}
+all_trips_24_v2 %>% 
+  count(member_casual) %>%
+  mutate(pct = round(n/sum(n)*100, 1),
+         label = paste0(member_casual, " (", pct, "%)")) %>%
+  ggplot(aes(
+    x = "", y = n, fill = member_casual)) +
+  geom_bar(stat = "identity", width = 1, color = "white") +
+  coord_polar("y") +
+  geom_text(aes(label = label),
+            position = position_stack(vjust = 0.5), color = "white", size = 5) +
+  labs(
+    title = "Percentage of ride by type of user", 
+    fill = "Member Casual") +
+  theme_void()
+```
