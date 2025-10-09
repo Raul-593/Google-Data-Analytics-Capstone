@@ -51,18 +51,18 @@ dec_24 <- read.csv("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\
 So first let's see if all the columns are equal  
 
   + *January*
-    ![columnsJan](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
+![columnsJan](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
 
 
   + *February*
-    ![columnsFeb](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
+![columnsFeb](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
 
 
   + *March*  
-    ![columnsMar](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
+![columnsMar](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
 
   + *April*  
-    ![columnsApr](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
+![columnsApr](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
 
   + *May*  
     ![columnsMay](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
@@ -91,19 +91,19 @@ So first let's see if all the columns are equal
 Now let's see that all the data is consistent  
 
   + *January*
-    ![DataTypeJan](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
+ ![DataTypeJan](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
  
   + *February*  
-    ![DataTypeFeb](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
+![DataTypeFeb](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
   
   +  *March*
-    ![DataTypeMar](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
+ ![DataTypeMar](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
   
   +  *April*  
-    ![DataTypeJan](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
+ ![DataTypeJan](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
 
   + *May*  
-    ![DataTypeJan](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
+![DataTypeJan](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
     
   + *June*  
     ![DataTypeJan](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
@@ -131,12 +131,13 @@ The data is consistent, so we can continue to the next step
 #### 2. Data Combination  
 The data combinated of January 2024 to Diciember 2024, is join by _bind_rows_ in RStudio. The result of the combined data is 5,860,568 rows and 13 columns  
 ```{r alltrips, echo=FALSE, warning=FALSE}
+#Combining the data frames
 all_trips_24 <- bind_rows(ene_24, feb_24, mar_24, apr_24, may_24, jun_24, jul_24, aug_24, sep_24, oct_24, nov_24, dec_24)
 ```
 ![DataType](https://github.com/Raul-593/image/blob/main/all_trips_2024.png?raw=true)
 
 ### 3. Data Cleaning and Transforming 
-* Transform the _**started_at**_ and _**ended_at**_ columns from _char_ to _POSIXct_ to perform the following calculation\
+* Transform the _**started_at**_ and _**ended_at**_ columns from _char_ to _POSIXct_ to perform the following calculation
 
 * Calculate the duration of the rides\
 ```{r ride_lenght, echo=TRUE, warning=FALSE}
@@ -151,17 +152,19 @@ all_trips_24 %>%
   head()
 ```
 
-* We create new columns from the started_at column, where we obtain the year, month, day, hour, and day of the week.\
+* We create new columns from the started_at column, where we obtain the year, month, day, hour, and day of the week.
 ```{r nuevas columanas año, echo=FALSE, warning=FALSE}
+#Separeting and Transforming Data Type by
+#YEAR
 all_trips_24$year <- year(all_trips_24$started_at)
+#MONTH
 all_trips_24$month <- month(all_trips_24$started_at)
+#DAY
 all_trips_24$day <- day(all_trips_24$started_at)
+#HOUR
 all_trips_24$hour <- format(all_trips_24$started_at,  "%H:%M:%S")
+# and DAY OF THE WEEK
 all_trips_24$day_week <- wday(all_trips_24$started_at, label = TRUE, abbr = FALSE,week_start = 7, locale = "en_US")
-
-all_trips_24 %>% 
-  select(year, month, day, hour, day_week) %>% 
-  head()
 ```
 
 Before de next step in the process, i have to clean de the data:  
@@ -171,6 +174,7 @@ Before de next step in the process, i have to clean de the data:
   + end_lat  
   + end_lng  
 ```{r limpieza de columnas, echo=TRUE}
+#Cleaning data from the columns that not would by used
 all_trips_24 <- all_trips_24 %>% 
   select(-c(start_lat, start_lng, end_lat, end_lng))
 ```
@@ -180,17 +184,14 @@ And finally we create another dataframe with all the clean data
 * The new and clean data frame is 5,859,845 row and 15 columns, witch mean that 723 row were removed  
 
 ```{r clean_data, echo=FALSE, warning=FALSE}
+#Creating a copy so i dont alter the cleang data
 all_trips_24_v2 <- all_trips_24[!(all_trips_24$ride_length <= 0),]
 ```
 
-![DataType](https://github.com/Raul-593/image/blob/main/all_trips_v2.png?raw=true)
+![DataType](https://github.com/Raul-593/image/blob/main/all_trips_2024_v2.png?raw=true)
 
 
 ## **ANALYZE**  
-```{r meses nombre, include=FALSE}
-all_trips_24 <- all_trips_24 %>% 
-  mutate(month = month(started_at, label = TRUE, abbr = FALSE, locale = "en_US"))
-```
 ##### __Question to analyze__ : *How do members and casual riders use Cyclist bike differently?*
 
 To answer this question first let's see the percentage of casual and member used
