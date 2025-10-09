@@ -48,10 +48,9 @@ dec_24 <- read.csv("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\
 
 So first let's see if all the columns are equal  \
 
-  + *January*  
-```{r columna_ene, echo=FALSE, warning=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\columns.png")
-```
+  + *January*
+    ![columnsJan](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
+
 
   + *February*  
 ```{r columna_feb, echo=FALSE, warning=FALSE}
