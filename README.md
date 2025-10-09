@@ -16,7 +16,7 @@ Data obtained from [DIVV-TripData](https://divvy-tripdata.s3.amazonaws.com/index
     -   Data Cleaning and Transforms Data
         -   RStudio
     -   Data visualizacion
-        -   RStudio
+        -   [Tableau](https://public.tableau.com/app/profile/raul.viteri2962/viz/2024RidesMembervsCasualUsers/2024RIDESMEMBERVSCASUAL#1)
         
 ## **PROCESS**
 
@@ -51,18 +51,16 @@ dec_24 <- read.csv("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\
 So first let's see if all the columns are equal  
 
   + *January*
-![columnsJan](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
-
+    ![columnsJan](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
 
   + *February*
-![columnsFeb](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
+    ![columnsFeb](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
 
+  + *March*
+    ![columnsMar](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
 
-  + *March*  
-![columnsMar](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
-
-  + *April*  
-![columnsApr](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
+  + *April*
+    ![columnsApr](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
 
   + *May*  
     ![columnsMay](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
@@ -91,26 +89,26 @@ So first let's see if all the columns are equal
 Now let's see that all the data is consistent  
 
   + *January*
- ![DataTypeJan](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
+    ![DataTypeJan](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
  
-  + *February*  
-![DataTypeFeb](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
+  + *February*
+    ![DataTypeFeb](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
   
   +  *March*
- ![DataTypeMar](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
+    ![DataTypeMar](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
   
-  +  *April*  
- ![DataTypeJan](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
+  +  *April*
+    ![DataTypeJan](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
 
-  + *May*  
-![DataTypeJan](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
-    
+  + *May*
+    ![DataTypeJan](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
+
   + *June*  
     ![DataTypeJan](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
-  
+
   + *July*  
     ![DataType](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
-    
+
   + *August*  
     ![DataType](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
   
@@ -196,4 +194,89 @@ all_trips_24_v2 <- all_trips_24[!(all_trips_24$ride_length <= 0),]
 
 To answer this question first let's see the percentage of casual and member used
 
-![DataType](https://github.com/Raul-593/image/blob/main/pie_char_total_use.png?raw=true)
+![DataType](https://github.com/Raul-593/image/blob/main/Percentaje%20of%20ride%20by%20user.png?raw=true)
+
+* Membership users have a higher use of bicycles compared to casual users  
+* Membership users use bicycles 63.3% more than casual users  
+
+In the following graph we can see which type are the most used bicycles  
+![TypeofBike](https://github.com/Raul-593/image/blob/main/Total%20Rides%20per%20type%20of%20BIke.png?raw=true)
+
+* We can see that all Cyclist users prefer bicycles over scooters  
+* The percentage of members who rent electric bikes is slightly higher than those who rent classic bikes  
+* The percentage of casual users who rent electric bikes is much higher than those who rent classic bikes  
+
+Now I will calculate the average duration of trips per month made by users with membership and casual users  
+
+```{r average ride duration}
+# Calculete the average duration of rides
+avg_duration_ride <- all_trips_24_v2 %>% 
+  group_by(member_casual, month) %>% 
+  summarise(avg_duration = mean(ride_length), .groups = "drop")
+```
+
+Now let's compare the number of rides per month and the average duration of the rides between members and casual users  
+```{r group by month}
+# Group the data by month and calculate the total number of rides
+month_rides <- all_trips_24_v2 %>% 
+  group_by(member_casual, month) %>% 
+  summarise(number_of_ride = n(), .groups = "drop") %>% 
+  arrange(member_casual, month)
+```
+
+![TotalRideperMonth](https://github.com/Raul-593/image/blob/main/Total%20Ride%20per%20Month.png?raw=true)
+
+![TotalAvgDurationperMonth](https://github.com/Raul-593/image/blob/main/Avg%20Ride%20Duration%20per%20month.png?raw=true)
+
+* It can be observed that users with memberships make more trips per month  
+* Casual users make longer trips  
+* We can also observe that there is a decrease in the number of trips in the month of September - October  
+* It can be observed that in October there was an increase in the ride time of casual users, this may be due to the holidays
+
+Now let's compare the number of rides per day and the average duration of the rides between members and casual user  
+
+**_Number of Rides per day_**
+![NumberofRideperDay](https://github.com/Raul-593/image/blob/main/Total%20Ride%20per%20day.png?raw=true)
+
+* We can see that member make more rides per day that casual
+* We can see that Wednesdays are the days where members take the most rides
+* Also, we can see that Saturdays are the days where casuals take the most rides
+
+**_Avg Duration of Ride per day_**
+![AvgDurationRideperDay](https://github.com/Raul-593/image/blob/main/Avg%20Ride%20per%20Day.png?raw=true)
+
+* In the graph, we can see that casual users take much longer rides than member users
+* It can also be seen that the days with the longest average trips are Sundays, followed by Saturdays
+
+## **Share**  
+
+#### **_Dashboard_**
+![Dashboard](https://github.com/Raul-593/image/blob/main/2024%20RIDES%20MEMBER%20VS%20CASUAL.png?raw=true)
+[2024 Rides Member vs Causal Users](https://public.tableau.com/app/profile/raul.viteri2962/viz/2024RidesMembervsCasualUsers/2024RIDESMEMBERVSCASUAL#1)
+
+*__How do members and casual riders use Cyclist bike differently?__*
+
+* Based on the analysis, we can see that members use bicycles more frequently during the week, while casual users use them on weekends, with a higher percentage on Saturdays  
+* This may be because casual users prefer to use bicycles as a means of tourism or touring, while members use them as a mode of transportation  
+* It can also be observed that there is a decrease in use starting in September by both types of users, this may be because it is the end of summer
+
+## Act
+
+__*Recommendations*__  
+Based on the analysis done the  marketing campaign to convert casual users to members users, my suggestions would be the following:
+
+* __Create custom memberships__  
+    + Custom memberships can be created to target a different group of users, for example, a monthly or seasonal membership, since there is a large group of users who use the service during the summer and may be interested in obtaining a membership during that time only  
+
+* **Give a discount for adding friends**  
+    + As can be seen in the graphs, casual users use the Cyclist service on Saturdays, just like member users. It's very likely that in a large group of rides that take place on that day will include both member and casual users, so it would be a good strategy to offer discounts to member users for adding their casual user friends to the member users  
+
+* **Seasonal Campaigns**  
+    + Create seasonal campaigns, where prices can be lowered during periods such as winter, when membership and casual users use the Cyclist service less frequently. Launch promotions for weekends, holidays, or longer trips for members that encourage cycling  
+
+* **Social Media**
+    + Based on the previous points, you can create marketing campaigns on social media that tell stories about how casual users and members use the Cyclist service. These stories can include how the Cyclist service has helped them get around the city or how it has served as a distraction from a stressful week at work  
+
+* **Social Media**  
+    + Based on the previous points, you can create marketing campaigns on social media that tell stories about how casual users and members use the Cyclist service. These stories can include how the Cyclist service has helped them get around the city or how it has served as a distraction from a stressful week at work
+
