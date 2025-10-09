@@ -21,6 +21,7 @@ Data obtained from [DIVV-TripData](https://divvy-tripdata.s3.amazonaws.com/index
 ## **PROCESS**
 
 ```{r library, include=FALSE}
+#Impotando las librerias necesarias
 library(tidyverse)
 library(conflicted)
 library(skimr)
@@ -28,6 +29,7 @@ library(patchwork)
 ```
 
 ```{r exploracion de datos, echo=FALSE, warning=FALSE}
+# Importando los diferentes dataframes
 ene_24 <- read.csv("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\Capstone\\202401-divvy-tripdata.csv")
 feb_24 <- read.csv("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\Capstone\\202402-divvy-tripdata.csv")
 mar_24 <- read.csv("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\Capstone\\202403-divvy-tripdata.csv")
@@ -46,142 +48,94 @@ dec_24 <- read.csv("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\
   + The first step of my work is to check if tables are consistent with each other   
   + This is achieved by looking at the columns and the data type each column contains  
 
-So first let's see if all the columns are equal  \
+So first let's see if all the columns are equal  
 
   + *January*
     ![columnsJan](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
 
 
-  + *February*  
-```{r columna_feb, echo=FALSE, warning=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\columns.png")
-```
+  + *February*
+    ![columnsFeb](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
+
 
   + *March*  
-```{r columna_mar, echo=FALSE, warning=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\columns.png")
-```
+    ![columnsMar](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
 
   + *April*  
-```{r columna_abr, echo=FALSE, warning=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\columns.png")
-```
+    ![columnsApr](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
 
   + *May*  
-```{r columna_may, echo=FALSE, warning=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\columns.png")
-```
+    ![columnsMay](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
 
   + *June*  
-```{r columna_jun, echo=FALSE, warning=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\columns.png")
-```
+    ![columnsJun](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
 
   + *July*  
-```{r columna_jul, echo=FALSE, warning=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\columns.png")
-```
+    ![columnsJul](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
 
   + *August*  
-```{r columna_ago, echo=FALSE, warning=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\columns.png")
-```
+    ![columnsAug](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
 
   + *September*  
-```{r columna_sep, echo=FALSE, warning=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\columns.png")
-```
+    ![columnsSep](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
 
   + *October*  
-```{r columna_oct, echo=FALSE, warning=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\columns.png")
-```
+    ![columnsOct](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
 
   + *November*  
-```{r columna_nov, echo=FALSE, warning=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\columns.png")
-```
+    ![columnsNov](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
 
   + *December*  
-```{r columna_dic, echo=FALSE, warning=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\columns.png")
-```
+    ![columnsDec](https://github.com/Raul-593/image/blob/main/columns.png?raw=true)
 
 Now let's see that all the data is consistent  
 
-  + *January*  
-```{r ene_type data, echo=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\data_type.png")
-```
+  + *January*
+    ![DataTypeJan](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
  
   + *February*  
-```{r feb_type data, echo=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\data_type.png")
-```
-
-  + *March*  
-```{r mar_type data, echo=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\data_type.png")
-```
-
-  + *April*  
-```{r apr_type data, echo=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\data_type.png")
-```
+    ![DataTypeFeb](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
+  
+  +  *March*
+    ![DataTypeMar](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
+  
+  +  *April*  
+    ![DataTypeJan](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
 
   + *May*  
-```{r may_type data, echo=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\data_type.png")
-```
-
+    ![DataTypeJan](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
+    
   + *June*  
-```{r jun_type data, echo=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\data_type.png")
-```
-
+    ![DataTypeJan](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
+  
   + *July*  
-```{r jul_type data, echo=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\data_type.png")
-```
-
+    ![DataType](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
+    
   + *August*  
-```{r aug_type data, echo=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\data_type.png")
-```
-
+    ![DataType](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
+  
   + *September*  
-```{r sep_type data, echo=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\data_type.png")
-```
-
+    ![DataType](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
+    
   + *October*  
-```{r oct type data, echo=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\data_type.png")
-```
+    ![DataType](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
 
   + *November*  
-```{r nov type data, echo=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\data_type.png")
-```
-
+    ![DataType](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
+    
   + *December*  
-```{r dec type data, echo=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\data_type.png")
-```
-
+    ![DataType](https://github.com/Raul-593/image/blob/main/data_type.png?raw=true)
+    
 The data is consistent, so we can continue to the next step  
 
-#### 2. Data Combination  \
+#### 2. Data Combination  
 The data combinated of January 2024 to Diciember 2024, is join by _bind_rows_ in RStudio. The result of the combined data is 5,860,568 rows and 13 columns  
 ```{r alltrips, echo=FALSE, warning=FALSE}
 all_trips_24 <- bind_rows(ene_24, feb_24, mar_24, apr_24, may_24, jun_24, jul_24, aug_24, sep_24, oct_24, nov_24, dec_24)
 ```
+![DataType](https://github.com/Raul-593/image/blob/main/all_trips_2024.png?raw=true)
 
-```{r all_trips, echo=FALSE, warning=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\all_trips_2024.png")
-```
-
-### 3. Data Cleaning and Transforming \
+### 3. Data Cleaning and Transforming 
 * Transform the _**started_at**_ and _**ended_at**_ columns from _char_ to _POSIXct_ to perform the following calculation\
 
 * Calculate the duration of the rides\
@@ -229,9 +183,8 @@ And finally we create another dataframe with all the clean data
 all_trips_24_v2 <- all_trips_24[!(all_trips_24$ride_length <= 0),]
 ```
 
-```{r all_trips_v2, echo=FALSE, warning=FALSE}
-knitr::include_graphics("C:\\Users\\Personal\\Documents\\Google Certificate\\RStudio\\image\\Capstone\\all_trips_2024_v2.png")
-```
+![DataType](https://github.com/Raul-593/image/blob/main/all_trips_v2.png?raw=true)
+
 
 ## **ANALYZE**  
 ```{r meses nombre, include=FALSE}
@@ -240,20 +193,6 @@ all_trips_24 <- all_trips_24 %>%
 ```
 ##### __Question to analyze__ : *How do members and casual riders use Cyclist bike differently?*
 
-To answer this question first let's see the percentage of casual and member used  
-```{r grafico pie porcentaje, echo=FALSE, warning=FALSE}
-all_trips_24_v2 %>% 
-  count(member_casual) %>%
-  mutate(pct = round(n/sum(n)*100, 1),
-         label = paste0(member_casual, " (", pct, "%)")) %>%
-  ggplot(aes(
-    x = "", y = n, fill = member_casual)) +
-  geom_bar(stat = "identity", width = 1, color = "white") +
-  coord_polar("y") +
-  geom_text(aes(label = label),
-            position = position_stack(vjust = 0.5), color = "white", size = 5) +
-  labs(
-    title = "Percentage of ride by type of user", 
-    fill = "Member Casual") +
-  theme_void()
-```
+To answer this question first let's see the percentage of casual and member used
+
+![DataType](https://github.com/Raul-593/image/blob/main/pie_char_total_use.png?raw=true)
